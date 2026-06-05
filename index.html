@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MangaLens v1.8.0 — 完整安裝與使用說明</title>
+<style>
+  :root {
+    --bg: #F7F1E8;
+    --surface: #FFFBF3;
+    --fg: #2E2823;
+    --muted: #6B5F54;
+    --softer: #A89B8C;
+    --border: #E5DCCC;
+    --hair: #EFE6D5;
+    --accent: #C8743A;
+    --accent-tint: #F4E3D2;
+    --sage: #7A8B6C;
+    --warn: #B85C3A;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, "Helvetica Neue", "PingFang TC", "Microsoft JhengHei", sans-serif;
+    line-height: 1.7;
+    font-size: 16px;
+  }
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 48px 28px 80px;
+  }
+  header {
+    text-align: center;
+    padding: 32px 0 48px;
+    border-bottom: 1px solid var(--hair);
+    margin-bottom: 48px;
+  }
+  .logo {
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+    background: var(--accent);
+    border-radius: 16px;
+    color: var(--surface);
+    line-height: 64px;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(200, 116, 58, 0.25);
+  }
+  h1 {
+    font-size: 32px;
+    margin: 8px 0 4px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 15px;
+    margin: 0;
+  }
+  .version-badge {
+    display: inline-block;
+    background: var(--accent-tint);
+    color: var(--accent);
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 48px;
+  }
+  nav.toc h3 {
+    margin: 0 0 12px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  nav.toc ol {
+    margin: 0;
+    padding-left: 22px;
+    color: var(--fg);
+  }
+  nav.toc li { margin: 4px 0; }
+  nav.toc a {
+    color: var(--fg);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+  nav.toc a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 32px 28px;
+    margin-bottom: 28px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+  }
+  h2 {
+    font-size: 22px;
+    margin: 0 0 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--accent-tint);
+    color: var(--fg);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  h2 .step-num {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--surface);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 32px;
+    font-size: 15px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  h3 {
+    font-size: 17px;
+    margin: 24px 0 10px;
+    color: var(--fg);
+  }
+  p { margin: 10px 0; }
+  ol, ul { padding-left: 24px; }
+  ol li, ul li { margin: 8px 0; }
+  code {
+    background: var(--hair);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: "SF Mono", "Menlo", "Consolas", monospace;
+    font-size: 13px;
+    color: var(--accent);
+  }
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent-tint);
+  }
+  a:hover { border-color: var(--accent); }
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-tint);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+    font-size: 14.5px;
+  }
+  .callout.warn {
+    border-color: var(--warn);
+    background: #F9E4DC;
+  }
+  .callout.tip {
+    border-color: var(--sage);
+    background: #E8EDE0;
+  }
+  .callout strong { color: var(--accent); }
+  .callout.warn strong { color: var(--warn); }
+  .callout.tip strong { color: var(--sage); }
+  .download-card {
+    background: linear-gradient(135deg, var(--accent) 0%, #A8602F 100%);
+    color: var(--surface);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  .download-card a {
+    color: var(--surface);
+    font-weight: 700;
+    font-size: 16px;
+    border: none;
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    padding: 10px 22px;
+    border-radius: 8px;
+    margin-top: 8px;
+    transition: background 0.2s;
+  }
+  .download-card a:hover {
+    background: rgba(255,255,255,0.28);
+  }
+  .download-card .meta {
+    font-size: 13px;
+    opacity: 0.85;
+    margin-top: 6px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    text-align: left;
+  }
+  th {
+    background: var(--hair);
+    font-weight: 600;
+    color: var(--muted);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .keyboard {
+    display: inline-block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-bottom-width: 2px;
+    padding: 1px 8px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  footer {
+    text-align: center;
+    color: var(--softer);
+    font-size: 13px;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--hair);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="logo">M</div>
+  <h1>MangaLens<span class="version-badge">v1.8.0</span></h1>
+  <p class="subtitle">韓文 / 日文漫畫框選即翻譯 — 完整安裝與使用說明</p>
+</header>
+
+<nav class="toc">
+  <h3>目錄</h3>
+  <ol>
+    <li><a href="#step1">下載與安裝 APK</a></li>
+    <li><a href="#step2">註冊 Groq 帳號並取得 API Key</a></li>
+    <li><a href="#step3">在 App 內新增 OpenAI Profile</a></li>
+    <li><a href="#step4">把 Profile 套到各功能（翻譯／視覺／辭典）</a></li>
+    <li><a href="#step5">正式使用 — 框選翻譯漫畫</a></li>
+    <li><a href="#step6">進階：辭典查字義 + 生字本</a></li>
+    <li><a href="#faq">常見問題</a></li>
+  </ol>
+</nav>
+
+<!-- ============== STEP 1 ============== -->
+<section id="step1">
+  <h2><span class="step-num">1</span>下載與安裝 APK</h2>
+
+  <div class="download-card">
+    <div style="font-size: 14px; opacity: 0.85;">最新版本</div>
+    <div style="font-size: 24px; font-weight: 700; margin: 4px 0;">MangaLens v1.8.0</div>
+    <a href="https://drive.google.com/open?id=1D39YSP1olDD5PqhQHIHyq9fb5zbvVa3P" target="_blank">點此下載 APK</a>
+    <div class="meta">Universal APK · 77 MB · 2026-05-17 build</div>
+  </div>
+
+  <h3>安裝步驟</h3>
+  <ol>
+    <li>用手機瀏覽器打開上方下載連結，點右上角下載圖示存到本機。</li>
+    <li>打開「檔案」App，找到剛剛下載的 <code>MangaLens-v1.8.0.apk</code>，點開。</li>
+    <li>若首次安裝會跳出「允許此來源安裝未知 App」→ 點「設定」→ 開啟權限 → 回到安裝畫面。</li>
+    <li>點「安裝」→ 等幾秒 → 完成。</li>
+  </ol>
+
+  <div class="callout warn">
+    <strong>注意 — Google Play Protect 攔截：</strong>因為這是側載 APK，可能跳「Play Protect 不建議安裝」的視窗。點「<strong>仍要安裝</strong>」即可（這是 Google 對所有非 Play Store 來源的標準警告，不是病毒）。
+  </div>
+
+  <div class="callout warn">
+    <strong>覆蓋舊版裝不上：</strong>如果你裝過更早的版本，新版可能因為簽章不同無法直接覆蓋。<br>
+    解法：先反安裝舊的 MangaLens，再裝新版。<em>（舊版的設定不會帶過來，要重新設定 API Key）</em>
+  </div>
+</section>
+
+<!-- ============== STEP 2 ============== -->
+<section id="step2">
+  <h2><span class="step-num">2</span>註冊 Groq 帳號並取得 API Key</h2>
+
+  <p>Groq 是目前 <strong>免費額度最佛心</strong>、速度也最快的 LLM 服務商，支援 Llama / Qwen / GPT-OSS 等開源模型，最適合拿來跑漫畫翻譯。</p>
+
+  <h3>2-1. 註冊帳號</h3>
+  <ol>
+    <li>用電腦或手機瀏覽器打開 <a href="https://console.groq.com" target="_blank">https://console.groq.com</a></li>
+    <li>右上角點「<strong>Sign Up</strong>」</li>
+    <li>選「<strong>Continue with Google</strong>」用 Google 帳號登入（最快）<br>
+        — 或用 Email 註冊也可以。</li>
+    <li>第一次登入會跳一些歡迎畫面，一路 Next / Skip 過就好。</li>
+  </ol>
+
+  <h3>2-2. 建立 API Key</h3>
+  <ol>
+    <li>登入後，左側選單點「<strong>API Keys</strong>」（也可以直接打開 <a href="https://console.groq.com/keys" target="_blank">console.groq.com/keys</a>）</li>
+    <li>點右上角藍色按鈕「<strong>+ Create API Key</strong>」</li>
+    <li>命名隨便，建議寫「<code>MangaLens</code>」方便日後辨識</li>
+    <li>點「Submit」→ 會跳出 Key 內容，<strong>長得像 <code>gsk_xxxxxxxxxxxxxxxx</code></strong></li>
+    <li>點旁邊複製圖示，<strong>整串複製起來</strong>（建議先貼到記事本，因為這個視窗關掉就再也看不到了）</li>
+  </ol>
+
+  <div class="callout warn">
+    <strong>重要：</strong>Groq 的 API Key 只會顯示一次，視窗關掉後就再也看不到完整 key。如果搞丟了只能刪掉重建一支。
+  </div>
+
+  <div class="callout tip">
+    <strong>免費額度：</strong>Groq 對所有人提供慷慨的免費額度（每日重置），個人用翻譯漫畫完全用不完。不需要綁信用卡。
+  </div>
+</section>
+
+<!-- ============== STEP 3 ============== -->
+<section id="step3">
+  <h2><span class="step-num">3</span>在 App 內新增 OpenAI Profile</h2>
+
+  <p>v1.8.0 的新架構：把 baseUrl + apiKey 集中在「OpenAI Profile」管理，<strong>5 個功能共享同一份設定</strong>，換 key 改一次就好。</p>
+
+  <h3>3-1. 打開設定</h3>
+  <ol>
+    <li>打開 MangaLens</li>
+    <li>右上角點齒輪 ⚙ 進入「設定」</li>
+    <li>找到「<strong>OpenAI Profiles</strong>」分頁（或翻到設定最下方）</li>
+  </ol>
+
+  <h3>3-2. 新增 Groq Profile</h3>
+  <ol>
+    <li>點「<strong>+ 新增 Profile</strong>」</li>
+    <li>填入：
+      <ul>
+        <li><strong>名稱</strong>：<code>Groq</code>（隨便，看得懂就好）</li>
+        <li><strong>Base URL</strong>：已預填 <code>https://api.groq.com/openai</code>（不用改）</li>
+        <li><strong>API Key</strong>：把剛剛從 Groq 複製的 <code>gsk_xxxx...</code> 整串貼進去</li>
+      </ul>
+    </li>
+    <li>點「<strong>儲存</strong>」</li>
+    <li>儲存後可以點「<strong>測試連線</strong>」，成功的話會跳出可用模型清單（看到一堆 llama / qwen / openai/gpt-oss 等等就對了）</li>
+  </ol>
+
+  <div class="callout tip">
+    <strong>小提醒：</strong>如果你之後想再加 OpenAI 官方、DeepSeek、Together AI 等其他兼容服務，重複以上步驟新增另一個 Profile 就好，可以共存。
+  </div>
+</section>
+
+<!-- ============== STEP 4 ============== -->
+<section id="step4">
+  <h2><span class="step-num">4</span>把 Profile 套到各功能</h2>
+
+  <p>有了 Profile 後要決定每個功能用哪一個 Profile + 哪一個模型。建議第一次就先把<strong>翻譯引擎</strong>設好，其他可以之後再調。</p>
+
+  <h3>4-1. 設定主翻譯引擎（一站式：Groq Vision）</h3>
+  <p>這是最常用的設定 — 一張漫畫圖片進去，OCR + 翻譯一起做完。</p>
+  <ol>
+    <li>在「設定」找到「<strong>翻譯引擎</strong>」</li>
+    <li>引擎選「<strong>OpenAI 相容（Vision）</strong>」</li>
+    <li>Profile dropdown 選「<strong>Groq</strong>」</li>
+    <li>Model dropdown 選一個帶 vision 的模型，推薦：
+      <ul>
+        <li><code>meta-llama/llama-4-scout-17b-16e-instruct</code> — 速度快、品質夠</li>
+        <li><code>meta-llama/llama-4-maverick-17b-128e-instruct</code> — 品質更好但慢</li>
+      </ul>
+    </li>
+    <li>翻譯目標語言：「<strong>繁體中文</strong>」</li>
+  </ol>
+
+  <h3>4-2. 各功能 Profile 對應表</h3>
+  <table>
+    <tr><th>功能</th><th>Profile</th><th>建議模型</th></tr>
+    <tr><td>主翻譯引擎</td><td>Groq</td><td>llama-4-scout（vision）</td></tr>
+    <tr><td>辭典查字</td><td>Groq</td><td>llama-3.3-70b-versatile</td></tr>
+    <tr><td>OCR 翻譯（兩段式）</td><td>Groq</td><td>llama-3.3-70b-versatile</td></tr>
+    <tr><td>CV 後處理 LLM</td><td>Groq</td><td>llama-3.1-8b-instant</td></tr>
+  </table>
+
+  <div class="callout">
+    <strong>為什麼分這麼細？</strong>不同任務需要不同等級的模型。辭典只查單字用小模型最快，視覺翻譯需要看圖一定要 vision 模型。Profile Pool 設計就是讓你可以同一支 key 套不同任務。
+  </div>
+</section>
+
+<!-- ============== STEP 5 ============== -->
+<section id="step5">
+  <h2><span class="step-num">5</span>正式使用 — 框選翻譯漫畫</h2>
+
+  <h3>5-1. 開啟漫畫</h3>
+  <p>MangaLens 有三種讀漫畫的方式：</p>
+  <ul>
+    <li><strong>瀏覽器模式</strong>：直接在 App 內的瀏覽器開漫畫網站（推特、Pixiv、Kakao Webtoon 等）</li>
+    <li><strong>本機檔案</strong>：開 EPUB / PDF 漫畫</li>
+    <li><strong>系統分享</strong>：從其他 App 分享圖片到 MangaLens</li>
+  </ul>
+
+  <h3>5-2. 框選翻譯（核心操作）</h3>
+  <ol>
+    <li>在漫畫頁面上，<strong>長按拖曳</strong>框出要翻譯的對話框／一整頁／好幾格都行</li>
+    <li>放手後會跳出操作選單，選「<strong>翻譯</strong>」</li>
+    <li>等個 2-5 秒（看模型速度），翻譯結果會以氣泡浮在原圖上</li>
+    <li>點氣泡可以看原文 + 翻譯對照</li>
+  </ol>
+
+  <h3>5-3. 連續翻譯模式</h3>
+  <p>如果整本要連著看，可以開「自動翻譯」：</p>
+  <ol>
+    <li>進入閱讀器後，工具列點「<strong>自動翻譯</strong>」開關</li>
+    <li>每翻一頁會自動偵測對話框並翻譯</li>
+    <li>記得 Groq 每分鐘有 rate limit，連翻太快可能會跳「請稍後」</li>
+  </ol>
+
+  <div class="callout tip">
+    <strong>省 token 小技巧：</strong>盡量只框「對話框」而不是整頁。雖然全頁也能翻，但小範圍翻譯品質更好、速度更快、用量更少。
+  </div>
+</section>
+
+<!-- ============== STEP 6 ============== -->
+<section id="step6">
+  <h2><span class="step-num">6</span>進階：辭典查字義 + 生字本</h2>
+
+  <h3>6-1. 查字義</h3>
+  <ol>
+    <li>翻譯完看到不認識的字，<strong>長按該字</strong>（或框選一個詞）</li>
+    <li>選「<strong>查字典</strong>」</li>
+    <li>會跳出該字的羅馬拼音、字義、例句、相關漢字</li>
+  </ol>
+
+  <h3>6-2. 加入生字本</h3>
+  <ol>
+    <li>查完字後在辭典視窗點「<strong>加入生字本</strong>」</li>
+    <li>可以分類、加標籤、寫筆記</li>
+    <li>主畫面點「<strong>生字本</strong>」可以隨時複習</li>
+  </ol>
+
+  <h3>6-3. 匯入術語表</h3>
+  <p>如果你在追特定作品有自訂譯名（例如角色名、招式名），可以做一份術語表：</p>
+  <ol>
+    <li>準備一個 CSV，欄位：原文,譯文,備註</li>
+    <li>設定 → 術語表 → 匯入 CSV</li>
+    <li>之後翻譯會優先採用你定的譯名</li>
+  </ol>
+</section>
+
+<!-- ============== FAQ ============== -->
+<section id="faq">
+  <h2><span class="step-num">?</span>常見問題</h2>
+
+  <h3>Q1：翻譯結果一直跳「請求失敗」</h3>
+  <ul>
+    <li>檢查 Profile 的 API Key 有沒有貼錯（前後不能有空白）</li>
+    <li>到 Groq Console 看 Key 還在不在、有沒有被停用</li>
+    <li>選的模型可能下架了 — 進 OpenAI Profile 重新 fetch 模型清單，挑現有的</li>
+  </ul>
+
+  <h3>Q2：翻譯品質不好</h3>
+  <ul>
+    <li>換更大的模型（scout → maverick）</li>
+    <li>框選範圍縮小，一次只翻一個對話框</li>
+    <li>或考慮加錢用 Gemini 2.5 Pro / GPT-4o 系列</li>
+  </ul>
+
+  <h3>Q3：可以離線用嗎？</h3>
+  <p>不行。所有翻譯引擎都需要連網呼叫 LLM API。但讀漫畫本身（不開翻譯）可以離線。</p>
+
+  <h3>Q4：圖會被上傳嗎？隱私如何？</h3>
+  <p>你框選的圖片區塊會傳到你設定的那家 LLM 服務商（例如 Groq）。MangaLens 本身不會收集或上傳你的資料 — 只在你選的 Profile 和該家服務商之間直接通訊。</p>
+
+  <h3>Q5：免費用到爆 Groq 額度怎麼辦？</h3>
+  <ul>
+    <li>Groq 每日重置免費額度，隔天就回來了</li>
+    <li>或新增第二個 Profile 接 Gemini AI Studio（也有免費額度）</li>
+    <li>或加錢升級 Groq 付費方案</li>
+  </ul>
+</section>
+
+<footer>
+  MangaLens v1.8.0 · 2026-05-17 build · warm-soft 日系極簡<br>
+  本說明文件最後更新：2026-06-05
+</footer>
+
+</div>
+</body>
+</html>
