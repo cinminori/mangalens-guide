@@ -366,19 +366,32 @@
 
   <p>有了 Profile 後要決定每個功能用哪一個 Profile + 哪一個模型。建議第一次就先把<strong>翻譯引擎</strong>設好，其他可以之後再調。</p>
 
-  <h3>4-1. 設定主翻譯引擎（一站式：Groq Vision）</h3>
-  <p>這是最常用的設定 — 一張漫畫圖片進去，OCR + 翻譯一起做完。</p>
+  <h3>4-1. 設定主翻譯引擎（Groq Vision + LLM）</h3>
+  <p>這是最推薦的設定 — Vision 模型負責看圖 + OCR，後端 LLM 負責翻譯，兩段串起來。</p>
   <ol>
-    <li>在「設定」找到「<strong>翻譯引擎</strong>」</li>
-    <li>引擎選「<strong>OpenAI 相容（Vision）</strong>」</li>
-    <li>Profile dropdown 選「<strong>Groq</strong>」</li>
-    <li>Model dropdown 選帶 vision 的模型，推薦：
+    <li>進入「<strong>設定</strong>」</li>
+    <li><strong>來源語言</strong>：依漫畫選「日文」或「韓文」</li>
+    <li><strong>文字方向</strong>：日漫直書多選「直書」、網漫橫向就選「橫書」</li>
+    <li><strong>翻譯引擎</strong>選「<strong>Groq Vision + LLM</strong>」</li>
+    <li>展開後會出現「<strong>GROQ VISION OCR</strong>」區塊：
       <ul>
-        <li><code>meta-llama/llama-4-scout-17b-16e-instruct</code> — 速度快、品質夠，目前 Groq 上最佳選擇</li>
+        <li><strong>Groq API Key</strong>：把剛剛複製的 <code>gsk_xxxx...</code> 整串貼進去</li>
+        <li><strong>Vision 模型</strong>：填 <code>meta-llama/llama-4-scout-17b-16e-instruct</code></li>
       </ul>
     </li>
-    <li>翻譯目標語言：「<strong>繁體中文</strong>」</li>
+    <li>往下找「<strong>翻譯後端</strong>」區塊：
+      <ul>
+        <li>引擎選「<strong>OpenAI 相容</strong>」</li>
+        <li>Provider 下拉選「<strong>Groq</strong>」（如果還沒有就點旁邊齒輪去 OpenAI Profiles 新增）</li>
+        <li>模型選 <code>qwen/qwen3-32b</code> 或 <code>llama-3.3-70b-versatile</code></li>
+      </ul>
+    </li>
+    <li>頁面最底按「<strong>載入模型清單</strong>」確認設定有讀到</li>
   </ol>
+
+  <div class="callout tip">
+    <strong>e-ink 用戶：</strong>最上面有「大字介面」開關，打開後字級和工具列圖示會放大，Supernote / Boox 等觸控有點難精準的裝置很好用。
+  </div>
 
   <h3>4-2. 各功能 Profile 對應表</h3>
   <table>
@@ -408,9 +421,10 @@
 
   <h3>5-2. 框選翻譯（核心操作）</h3>
   <ol>
-    <li>在漫畫頁面上，<strong>長按拖曳</strong>框出要翻譯的對話框／一整頁／好幾格都行</li>
-    <li>放手後會跳出操作選單，選「<strong>翻譯</strong>」</li>
-    <li>等個 2-5 秒（看模型速度），翻譯結果會以氣泡浮在原圖上</li>
+    <li>在漫畫頁面點<strong>右下角的橘色 FAB</strong>（剪裁圖示）</li>
+    <li>進入框選模式後，<strong>拖曳</strong>框出要翻譯的對話框／好幾格／整頁都行</li>
+    <li>放手後會跳出「<strong>辨識中…</strong>」提示，等 2-5 秒（看模型速度）</li>
+    <li>翻譯完成，結果會以氣泡浮在原圖上，疊在對應位置</li>
     <li>點氣泡可以看原文 + 翻譯對照</li>
   </ol>
 
