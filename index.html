@@ -372,10 +372,9 @@
     <li>在「設定」找到「<strong>翻譯引擎</strong>」</li>
     <li>引擎選「<strong>OpenAI 相容（Vision）</strong>」</li>
     <li>Profile dropdown 選「<strong>Groq</strong>」</li>
-    <li>Model dropdown 選一個帶 vision 的模型，推薦：
+    <li>Model dropdown 選帶 vision 的模型，推薦：
       <ul>
-        <li><code>meta-llama/llama-4-scout-17b-16e-instruct</code> — 速度快、品質夠</li>
-        <li><code>meta-llama/llama-4-maverick-17b-128e-instruct</code> — 品質更好但慢</li>
+        <li><code>meta-llama/llama-4-scout-17b-16e-instruct</code> — 速度快、品質夠，目前 Groq 上最佳選擇</li>
       </ul>
     </li>
     <li>翻譯目標語言：「<strong>繁體中文</strong>」</li>
@@ -384,14 +383,14 @@
   <h3>4-2. 各功能 Profile 對應表</h3>
   <table>
     <tr><th>功能</th><th>Profile</th><th>建議模型</th></tr>
-    <tr><td>主翻譯引擎</td><td>Groq</td><td>llama-4-scout（vision）</td></tr>
-    <tr><td>辭典查字</td><td>Groq</td><td>llama-3.3-70b-versatile</td></tr>
-    <tr><td>OCR 翻譯（兩段式）</td><td>Groq</td><td>llama-3.3-70b-versatile</td></tr>
-    <tr><td>CV 後處理 LLM</td><td>Groq</td><td>llama-3.1-8b-instant</td></tr>
+    <tr><td>主翻譯引擎（Vision）</td><td>Groq</td><td>llama-4-scout-17b-16e-instruct</td></tr>
+    <tr><td>後端翻譯模型</td><td>Groq</td><td>qwen/qwen3-32b<br>或 llama-3.3-70b-versatile</td></tr>
+    <tr><td>辭典查字</td><td>Groq</td><td>qwen/qwen3-32b<br>或 llama-3.3-70b-versatile</td></tr>
+    <tr><td>OCR 翻譯（兩段式）</td><td>Groq</td><td>qwen/qwen3-32b<br>或 llama-3.3-70b-versatile</td></tr>
   </table>
 
   <div class="callout">
-    <strong>為什麼分這麼細？</strong>不同任務需要不同等級的模型。辭典只查單字用小模型最快，視覺翻譯需要看圖一定要 vision 模型。Profile Pool 設計就是讓你可以同一支 key 套不同任務。
+    <strong>為什麼分視覺 vs 後端？</strong>視覺模型負責「看圖 + OCR」，需要多模態能力，<code>llama-4-scout</code> 是 Groq 上 vision 表現最好的。後端翻譯只處理純文字，<code>qwen3-32b</code> 中日韓翻譯品質很穩，<code>llama-3.3-70b</code> 則是穩定通用首選 — 兩個擇一即可，看你比較喜歡哪家的譯文風格。
   </div>
 </section>
 
@@ -468,7 +467,7 @@
 
   <h3>Q2：翻譯品質不好</h3>
   <ul>
-    <li>換更大的模型（scout → maverick）</li>
+    <li>後端翻譯模型可在 <code>qwen/qwen3-32b</code> 和 <code>llama-3.3-70b-versatile</code> 之間切換比較</li>
     <li>框選範圍縮小，一次只翻一個對話框</li>
     <li>或考慮加錢用 Gemini 2.5 Pro / GPT-4o 系列</li>
   </ul>
