@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MangaLens v1.8.0 — 完整安裝與使用說明</title>
+<title>MangaLens v1.8.1 — 完整安裝與使用說明</title>
 <style>
   :root {
     --bg: #F7F1E8;
@@ -234,6 +234,22 @@
     font-size: 13px;
     color: var(--muted);
   }
+  figure.shot {
+    margin: 20px auto;
+    text-align: center;
+  }
+  figure.shot img {
+    max-width: 100%;
+    width: 460px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  }
+  figure.shot figcaption {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
   footer {
     text-align: center;
     color: var(--softer);
@@ -249,7 +265,7 @@
 
 <header>
   <div class="logo">M</div>
-  <h1>MangaLens<span class="version-badge">v1.8.0</span></h1>
+  <h1>MangaLens<span class="version-badge">v1.8.1</span></h1>
   <p class="subtitle">韓文 / 日文漫畫框選即翻譯 — 完整安裝與使用說明</p>
 </header>
 
@@ -260,6 +276,7 @@
     <li><a href="#step2">註冊 Groq 帳號並取得 API Key</a></li>
     <li><a href="#step3">在 App 內新增 OpenAI Profile</a></li>
     <li><a href="#step4">把 Profile 套到各功能（翻譯／視覺／辭典）</a></li>
+    <li><a href="#cerebras">加開 Cerebras（gemma-4-31b）— 第二家免費服務商</a></li>
     <li><a href="#step5">正式使用 — 框選翻譯漫畫</a></li>
     <li><a href="#step6">進階功能（查字義／生字本／術語表／翻譯指引）</a></li>
     <li><a href="#faq">常見問題</a></li>
@@ -272,15 +289,22 @@
 
   <div class="download-card">
     <div style="font-size: 14px; opacity: 0.85;">最新版本</div>
-    <div style="font-size: 24px; font-weight: 700; margin: 4px 0;">MangaLens v1.8.0</div>
+    <div style="font-size: 24px; font-weight: 700; margin: 4px 0;">MangaLens v1.8.1</div>
     <a href="https://drive.google.com/open?id=1D39YSP1olDD5PqhQHIHyq9fb5zbvVa3P" target="_blank">點此下載 APK</a>
-    <div class="meta">Universal APK · 77 MB · 2026-05-17 build</div>
+    <div class="meta">Universal APK · 77 MB · 2026-07-14 build</div>
+  </div>
+
+  <div class="callout tip">
+    <strong>v1.8.1 更新重點：</strong>
+    ① Groq 即將下架 <code>qwen/qwen3-32b</code> 與 <code>llama-3.3-70b-versatile</code>，預設模型全面換成新的多模態模型 <code>qwen/qwen3.6-27b</code>（看圖 OCR 和翻譯一顆全包）；
+    ② 自動關閉 Qwen 系列的「思考模式」— 舊版偶爾會把一大串思考過程當成翻譯吐出來，這版從源頭修掉了；
+    ③ 新增 Cerebras（gemma-4-31b）申請與設定教學（見第 5 節）。
   </div>
 
   <h3>安裝步驟</h3>
   <ol>
     <li>用手機瀏覽器打開上方下載連結，點右上角下載圖示存到本機。</li>
-    <li>打開「檔案」App，找到剛剛下載的 <code>MangaLens-v1.8.0.apk</code>，點開。</li>
+    <li>打開「檔案」App，找到剛剛下載的 <code>MangaLens-v1.8.1.apk</code>，點開。</li>
     <li>若首次安裝會跳出「允許此來源安裝未知 App」→ 點「設定」→ 開啟權限 → 回到安裝畫面。</li>
     <li>點「安裝」→ 等幾秒 → 完成。</li>
   </ol>
@@ -332,7 +356,7 @@
 <section id="step3">
   <h2><span class="step-num">3</span>在 App 內新增 OpenAI Profile</h2>
 
-  <p>v1.8.0 的新架構：把 baseUrl + apiKey 集中在「OpenAI Profile」管理，<strong>5 個功能共享同一份設定</strong>，換 key 改一次就好。</p>
+  <p>v1.8 起的架構：把 baseUrl + apiKey 集中在「OpenAI Profile」管理，<strong>5 個功能共享同一份設定</strong>，換 key 改一次就好。</p>
 
   <h3>3-1. 打開設定</h3>
   <ol>
@@ -355,6 +379,11 @@
     <li>儲存後可以點「<strong>測試連線</strong>」，成功的話會跳出可用模型清單（看到一堆 llama / qwen / openai/gpt-oss 等等就對了）</li>
   </ol>
 
+  <figure class="shot">
+    <img src="images/add-profile.png" alt="新增 Provider 表單，名稱與 Base URL 已預填 Groq" loading="lazy">
+    <figcaption>「新增 Provider」表單 — 名稱和 Base URL 已預填好 Groq，只要貼上 API Key 再按右上角「儲存」</figcaption>
+  </figure>
+
   <div class="callout tip">
     <strong>小提醒：</strong>如果你之後想再加 OpenAI 官方、DeepSeek、Together AI 等其他兼容服務，重複以上步驟新增另一個 Profile 就好，可以共存。
   </div>
@@ -366,6 +395,11 @@
 
   <p>有了 Profile 後要決定每個功能用哪一個 Profile + 哪一個模型。建議第一次就先把<strong>翻譯引擎</strong>設好，其他可以之後再調。</p>
 
+  <div class="callout warn">
+    <strong>2026-07 模型下架公告：</strong>Groq 即將停止提供 <code>qwen/qwen3-32b</code> 和 <code>llama-3.3-70b-versatile</code>。
+    如果你是照舊版說明設定的，請把下面所有模型欄位改成新的 <code>qwen/qwen3.6-27b</code> — 它是多模態模型（能看圖也能翻譯），一顆就能取代原本的視覺＋後端兩顆。
+  </div>
+
   <h3>4-1. 設定主翻譯引擎（Groq Vision + LLM）</h3>
   <p>這是最推薦的設定 — Vision 模型負責看圖 + OCR，後端 LLM 負責翻譯，兩段串起來。</p>
   <ol>
@@ -376,18 +410,32 @@
     <li>展開後會出現「<strong>GROQ VISION OCR</strong>」區塊：
       <ul>
         <li><strong>Groq API Key</strong>：把剛剛複製的 <code>gsk_xxxx...</code> 整串貼進去</li>
-        <li><strong>Vision 模型</strong>：填 <code>meta-llama/llama-4-scout-17b-16e-instruct</code></li>
+        <li><strong>Vision 模型</strong>：填 <code>qwen/qwen3.6-27b</code></li>
       </ul>
     </li>
     <li>往下找「<strong>翻譯後端</strong>」區塊：
       <ul>
         <li>引擎選「<strong>OpenAI 相容</strong>」</li>
         <li>Provider 下拉選「<strong>Groq</strong>」（如果還沒有就點旁邊齒輪去 OpenAI Profiles 新增）</li>
-        <li>模型選 <code>qwen/qwen3-32b</code> 或 <code>llama-3.3-70b-versatile</code></li>
+        <li>按「<strong>載入模型清單</strong>」，模型選 <code>qwen/qwen3.6-27b</code></li>
       </ul>
     </li>
-    <li>頁面最底按「<strong>載入模型清單</strong>」確認設定有讀到</li>
   </ol>
+
+  <figure class="shot">
+    <img src="images/engine-menu.png" alt="翻譯引擎下拉選單，列出八種引擎" loading="lazy">
+    <figcaption>「翻譯引擎」下拉選單 — 主推「Groq Vision + LLM」；有 GCP 帳號的人也可以用「Cloud Vision + LLM」</figcaption>
+  </figure>
+
+  <figure class="shot">
+    <img src="images/groq-vision-settings.png" alt="Groq Vision + LLM 設定畫面，Vision 模型填 qwen/qwen3.6-27b" loading="lazy">
+    <figcaption>Groq Vision + LLM 設定完成的樣子 — Vision 模型填 <code>qwen/qwen3.6-27b</code>，翻譯後端 Provider 選 Groq</figcaption>
+  </figure>
+
+  <figure class="shot">
+    <img src="images/backend-model.png" alt="翻譯後端載入模型清單後選擇 qwen/qwen3.6-27b" loading="lazy">
+    <figcaption>按「載入模型清單」後，「模型」欄會出現下拉選單 — 選 <code>qwen/qwen3.6-27b</code>（圖中翻譯引擎為 Cloud Vision + LLM，Groq Vision + LLM 的後端設定完全相同）</figcaption>
+  </figure>
 
   <div class="callout tip">
     <strong>e-ink 用戶：</strong>最上面有「大字介面」開關，打開後字級和工具列圖示會放大，Supernote / Boox 等觸控有點難精準的裝置很好用。
@@ -396,22 +444,80 @@
   <h3>4-2. 各功能 Profile 對應表</h3>
   <table>
     <tr><th>功能</th><th>Profile</th><th>建議模型</th></tr>
-    <tr><td>主翻譯引擎（Vision）</td><td>Groq</td><td>llama-4-scout-17b-16e-instruct</td></tr>
-    <tr><td>後端翻譯模型</td><td>Groq</td><td>qwen/qwen3-32b<br>或 llama-3.3-70b-versatile</td></tr>
-    <tr><td>辭典查字</td><td>Groq</td><td>qwen/qwen3-32b<br>或 llama-3.3-70b-versatile</td></tr>
-    <tr><td>OCR 翻譯（兩段式）</td><td>Groq</td><td>qwen/qwen3-32b<br>或 llama-3.3-70b-versatile</td></tr>
+    <tr><td>主翻譯引擎（Vision）</td><td>Groq</td><td>qwen/qwen3.6-27b</td></tr>
+    <tr><td>後端翻譯模型</td><td>Groq</td><td>qwen/qwen3.6-27b<br>或 Cerebras 的 gemma-4-31b（見第 5 節）</td></tr>
+    <tr><td>辭典查字</td><td>Groq</td><td>qwen/qwen3.6-27b<br>或 Cerebras 的 gemma-4-31b</td></tr>
+    <tr><td>OCR 翻譯（兩段式）</td><td>Groq</td><td>qwen/qwen3.6-27b<br>或 Cerebras 的 gemma-4-31b</td></tr>
   </table>
 
   <div class="callout">
-    <strong>為什麼分視覺 vs 後端？</strong>視覺模型負責「看圖 + OCR」，需要多模態能力，<code>llama-4-scout</code> 是 Groq 上 vision 表現最好的。後端翻譯只處理純文字，<code>qwen3-32b</code> 中日韓翻譯品質很穩，<code>llama-3.3-70b</code> 則是穩定通用首選 — 兩個擇一即可，看你比較喜歡哪家的譯文風格。
+    <strong>一顆模型全包：</strong><code>qwen/qwen3.6-27b</code> 是多模態模型 — 看圖 OCR 和純文字翻譯都做得來，所以視覺和後端可以填同一顆，不用像以前分兩顆記兩個名字。
+    它同時也是會「思考」的推理模型：v1.8.1 起 App 會自動要求它<strong>跳過思考直接作答</strong>，不會再把一大串思考過程當成翻譯結果吐出來，回應速度也更快。
   </div>
 </section>
 
-<!-- ============== STEP 5 ============== -->
-<section id="step5">
-  <h2><span class="step-num">5</span>正式使用 — 框選翻譯漫畫</h2>
+<!-- ============== CEREBRAS ============== -->
+<section id="cerebras">
+  <h2><span class="step-num">5</span>加開 Cerebras（gemma-4-31b）— 第二家免費服務商</h2>
 
-  <h3>5-1. 開啟漫畫 — 兩種模式</h3>
+  <p>Cerebras 是做「晶圓級 AI 晶片」的公司，推理速度是出了名的快，而且<strong>免費額度同樣佛心：每天 100 萬 tokens、不用綁信用卡</strong>。
+  上面的 <code>gemma-4-31b</code>（Google 開源的 Gemma 4 多模態模型）翻譯效果很不錯，很適合當 Groq 之外的<strong>第二選擇</strong> — Groq 額度用完、塞車，或想比較不同模型的譯文風格時，一鍵就能切過去。</p>
+
+  <h3>5-1. 註冊帳號</h3>
+  <ol>
+    <li>用瀏覽器打開 <a href="https://cloud.cerebras.ai" target="_blank">https://cloud.cerebras.ai</a></li>
+    <li>點「<strong>Sign Up</strong>」，用 Google 帳號登入最快（Email 註冊也可以）</li>
+    <li>不需要信用卡、不用排隊等開通，註冊完就能用</li>
+  </ol>
+
+  <h3>5-2. 建立 API Key</h3>
+  <ol>
+    <li>登入 Cloud Console 後，點<strong>左側選單的「API Keys」</strong></li>
+    <li>點「<strong>+ Create Key</strong>」，名稱建議填 <code>MangaLens</code></li>
+    <li>複製產生的 Key（開頭是 <code>csk-</code>），<strong>先貼到記事本存好</strong></li>
+  </ol>
+
+  <h3>5-3. 在 App 內新增 Cerebras Profile</h3>
+  <ol>
+    <li>設定 → OpenAI Profiles → 點「<strong>+ 新增 Profile</strong>」</li>
+    <li>填入：
+      <ul>
+        <li><strong>名稱</strong>：<code>Cerebras</code></li>
+        <li><strong>Base URL</strong>：<code>https://api.cerebras.ai</code>（App 會自動補上 <code>/v1/...</code>）</li>
+        <li><strong>API Key</strong>：貼上剛剛的 <code>csk-xxxx...</code></li>
+      </ul>
+    </li>
+    <li>點「<strong>儲存</strong>」→「<strong>測試連線</strong>」，看到 <code>gemma-4-31b</code> 等模型出現就成功了</li>
+  </ol>
+
+  <figure class="shot">
+    <img src="images/cerebras-profile.png" alt="新增 Cerebras Provider，Base URL 填 https://api.cerebras.ai" loading="lazy">
+    <figcaption>Cerebras Profile 填好的樣子 — Base URL 填 <code>https://api.cerebras.ai</code>，貼上自己的 API Key 後按「儲存」</figcaption>
+  </figure>
+
+  <h3>5-4. 套用到翻譯功能</h3>
+  <ol>
+    <li>「<strong>翻譯後端</strong>」（或辭典引擎）選「<strong>OpenAI 相容</strong>」</li>
+    <li>Provider 下拉改選「<strong>Cerebras</strong>」</li>
+    <li>按「<strong>載入模型清單</strong>」，模型選 <code>gemma-4-31b</code></li>
+  </ol>
+  <p><code>gemma-4-31b</code> 也是多模態模型（收得了圖片），所以把「翻譯引擎」整個切成「OpenAI 相容」、Provider 選 Cerebras，讓它直接看圖翻譯也行。</p>
+
+  <div class="callout tip">
+    <strong>免費額度與限制：</strong>每天 100 萬 tokens（每日重置）、每分鐘最多 5 個請求／30K tokens，免費層 context 為 65K。
+    框選翻譯一格漫畫用不了多少 tokens，額度很夠用；但如果連續框選得太快撞到「每分鐘 5 次」的限制，等個一分鐘再翻就好。
+  </div>
+
+  <div class="callout">
+    <strong>Groq vs Cerebras 怎麼選？</strong>平常用 Groq（速率限制較鬆、機種選擇多）；Groq 當天額度用完、或想換個譯文風格時切到 Cerebras。兩家都免費，建議兩個 Profile 都設起來，隨時可切換。
+  </div>
+</section>
+
+<!-- ============== STEP 6 ============== -->
+<section id="step5">
+  <h2><span class="step-num">6</span>正式使用 — 框選翻譯漫畫</h2>
+
+  <h3>6-1. 開啟漫畫 — 兩種模式</h3>
   <p>MangaLens 讀漫畫有兩種模式：</p>
 
   <h4 style="margin-top:14px;">A. 本地書庫（手機裡有 EPUB / PDF）</h4>
@@ -432,7 +538,7 @@
     <strong>被網站 Cloudflare 擋住？</strong>跳「我不是機器人」驗證時，按瀏覽器右上角 <strong>⋮ 選單 → Cloudflare 驗證</strong>，過完就能正常看。
   </div>
 
-  <h3>5-2. 框選翻譯（核心操作）</h3>
+  <h3>6-2. 框選翻譯（核心操作）</h3>
   <p>不管在書庫或瀏覽器，都有兩種方式進入框選：</p>
   <ul>
     <li><strong>方法 A</strong>：<strong>長按畫面</strong> → 手指拖出一個方框，框住要翻的文字</li>
@@ -448,7 +554,7 @@
     <strong>長按沒反應？</strong>有些網頁會把長按事件吃掉，直接用右下角橘色 FAB 進框選模式就好。
   </div>
 
-  <h3>5-3. 點氣泡開啟功能視窗</h3>
+  <h3>6-3. 點氣泡開啟功能視窗</h3>
   <p>點任何一顆翻譯氣泡，會從底部滑出操作視窗：</p>
   <ul>
     <li><strong>標題列</strong>：顯示翻譯結果（例：「真的好開心喔」）</li>
@@ -468,9 +574,9 @@
     </li>
   </ul>
 
-  <h3>5-4. 翻譯氣泡的三個手勢</h3>
+  <h3>6-4. 翻譯氣泡的三個手勢</h3>
   <ul>
-    <li>👆 <strong>點一下</strong>：打開翻譯詳情視窗（就是 5-3 那個）</li>
+    <li>👆 <strong>點一下</strong>：打開翻譯詳情視窗（就是 6-3 那個）</li>
     <li>👆👆 <strong>點兩下</strong>：直接關掉這顆氣泡</li>
     <li>✊➡️ <strong>長按拖曳</strong>：移動氣泡位置，拖錯按「復原」</li>
   </ul>
@@ -480,26 +586,26 @@
   </div>
 </section>
 
-<!-- ============== STEP 6 ============== -->
+<!-- ============== STEP 7 ============== -->
 <section id="step6">
-  <h2><span class="step-num">6</span>進階功能</h2>
+  <h2><span class="step-num">7</span>進階功能</h2>
 
-  <h3>6-1. 📖 查字義</h3>
+  <h3>7-1. 📖 查字義</h3>
   <ol>
-    <li>點翻譯氣泡開啟「<strong>功能視窗</strong>」（見 5-3）</li>
+    <li>點翻譯氣泡開啟「<strong>功能視窗</strong>」（見 6-3）</li>
     <li>在「<strong>原文</strong>」區，<strong>點擊任一單字</strong> → 查字義</li>
     <li>會跳出該字的讀音、字義、詞性、例句</li>
     <li>進階：<strong>長按單字</strong>可以拆解該詞的字根組成</li>
   </ol>
 
-  <h3>6-2. 📝 生字本（匯出給 Anki 複習）</h3>
+  <h3>7-2. 📝 生字本（匯出給 Anki 複習）</h3>
   <ul>
     <li>查完字後在辭典視窗點「<strong>加入生字本</strong>」</li>
     <li>主畫面進「<strong>生字本</strong>」可以隨時複習</li>
     <li>支援<strong>匯出 CSV</strong> → 丟進 Anki 排程複習</li>
   </ul>
 
-  <h3>6-3. 📙 術語表（固定譯名）</h3>
+  <h3>7-3. 📙 術語表（固定譯名）</h3>
   <p>角色名一直被翻錯？加進術語表就解決：</p>
   <ul>
     <li>例：把「ナルト」固定翻成「鳴人」、「キン肉マン」固定翻成「金肉人」</li>
@@ -507,7 +613,7 @@
     <li>之後翻譯會優先採用你定的譯名</li>
   </ul>
 
-  <h3>6-4. 💬 翻譯指引（調語氣／風格）</h3>
+  <h3>7-4. 💬 翻譯指引（調語氣／風格）</h3>
   <p>可以給 AI 一句提示來調整翻譯風格，例如：</p>
   <ul>
     <li><code>BL 漫畫，語氣要曖昧一點</code></li>
@@ -515,7 +621,7 @@
     <li><code>古風武俠，避免現代口語</code></li>
   </ul>
 
-  <h3>6-5. 🔄 上下文記憶</h3>
+  <h3>7-5. 🔄 上下文記憶</h3>
   <p>App 會自動記住前 5 筆翻譯，讓後面翻出來的<strong>角色名、稱呼、語氣</strong>保持一致 — 不用額外設定，預設就開著。</p>
 </section>
 
@@ -532,30 +638,35 @@
 
   <h3>Q2：翻譯品質不好</h3>
   <ul>
-    <li>後端翻譯模型可在 <code>qwen/qwen3-32b</code> 和 <code>llama-3.3-70b-versatile</code> 之間切換比較</li>
+    <li>後端翻譯模型可在 Groq 的 <code>qwen/qwen3.6-27b</code> 和 Cerebras 的 <code>gemma-4-31b</code> 之間切換比較（見第 5 節）</li>
     <li>框選範圍縮小，一次只翻一個對話框</li>
-    <li>名詞翻錯 → 用<strong>術語表</strong>固定譯名（見 6-3）</li>
-    <li>語氣不對 → 用<strong>翻譯指引</strong>下提示（見 6-4）</li>
+    <li>名詞翻錯 → 用<strong>術語表</strong>固定譯名（見 7-3）</li>
+    <li>語氣不對 → 用<strong>翻譯指引</strong>下提示（見 7-4）</li>
     <li>或考慮加錢用 Gemini 2.5 Pro / GPT-4o 系列</li>
   </ul>
 
-  <h3>Q3：可以離線用嗎？</h3>
+  <h3>Q3：翻譯結果吐出一大串英文「思考過程」？</h3>
+  <p>Qwen 這類推理模型會先「想」再答，舊版偶爾會把整段思考鏈（<code>&lt;think&gt;...&lt;/think&gt;</code>）當成翻譯顯示出來。
+  <strong>升級到 v1.8.1 就好</strong> — 新版會從源頭要求模型跳過思考，就算模型硬要想也會自動過濾掉，翻譯速度還會變快。</p>
+
+  <h3>Q4：可以離線用嗎？</h3>
   <p>不行。所有翻譯引擎都需要連網呼叫 LLM API。但讀漫畫本身（不開翻譯）可以離線。</p>
 
-  <h3>Q4：圖會被上傳嗎？隱私如何？</h3>
+  <h3>Q5：圖會被上傳嗎？隱私如何？</h3>
   <p>你框選的圖片區塊會傳到你設定的那家 LLM 服務商（例如 Groq）。MangaLens 本身不會收集或上傳你的資料 — 只在你選的 Profile 和該家服務商之間直接通訊。</p>
 
-  <h3>Q5：免費用到爆 Groq 額度怎麼辦？</h3>
+  <h3>Q6：免費用到爆 Groq 額度怎麼辦？</h3>
   <ul>
     <li>Groq 每日重置免費額度，隔天就回來了</li>
+    <li>把翻譯後端切到 <strong>Cerebras 的 gemma-4-31b</strong>（見第 5 節）— 額度分開計算，每天也有 100 萬 tokens</li>
     <li>或新增第二個 Profile 接 Gemini AI Studio（也有免費額度）</li>
     <li>或加錢升級 Groq 付費方案</li>
   </ul>
 </section>
 
 <footer>
-  MangaLens v1.8.0 · 2026-05-17 build · warm-soft 日系極簡<br>
-  本說明文件最後更新：2026-06-05
+  MangaLens v1.8.1 · 2026-07-14 build · warm-soft 日系極簡<br>
+  本說明文件最後更新：2026-07-14
 </footer>
 
 </div>
